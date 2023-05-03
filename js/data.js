@@ -1,4 +1,6 @@
-
+/**
+ * The max number of books that can be shown per page
+ */
 export const BOOKS_PER_PAGE = 36;
 
 export const authors = {
