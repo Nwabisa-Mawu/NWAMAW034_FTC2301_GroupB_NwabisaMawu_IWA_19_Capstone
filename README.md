@@ -21,7 +21,10 @@ Files inside this repository:
     - data.js - js file with three objects for the genre, author and book information
 
 How the weboage looks:
-<></>
+<a href="https://www.loom.com/share/49e5c4ebc0144b04891e5747ad44f3db">
+    <p>Book Connect</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/49e5c4ebc0144b04891e5747ad44f3db-with-play.gif">
+  </a>
 
 
 

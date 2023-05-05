@@ -1,7 +1,6 @@
 import { books, genres, authors, BOOKS_PER_PAGE } from "./data.js";
 
-import { SHOW_MORE_BTN, fragment, lightToggleDialog } from "./scripts.js";
-
+import { SHOW_MORE_BTN, lightToggleDialog, data, FRAGMENT } from "./scripts.js";
 
 
 /*--------------------------------------------------------DISPLAY------------------------------------------------ */
@@ -17,7 +16,7 @@ export const updateBooksLeft = () => {
     /* fetch the books that are already on the page then count them and
 use the number of books left in the books object to add more books so the button
 can stop adding more books when all the books in the object have been added*/
-const booksOnPage = document.querySelectorAll('preview');
+const booksOnPage = data.home.bookCards;
 const booksOnPageCount = booksOnPage.length;
 //subtract books on page from total books in object
 const booksLeft = books.length - booksOnPageCount;
@@ -61,14 +60,14 @@ export const appendBooks = (books) => {
        </div>
      `;
      
-    // Append the button to the fragment.
-    fragment.appendChild(button);
+    // Append the button to the FRAGMENT.
+    FRAGMENT.appendChild(button);
 }
 
      // Append the fragment to the data-list-items div.
-     document.querySelector('[data-list-items]').appendChild(fragment);
+     data.home.main.appendChild(FRAGMENT);
 
-SHOW_MORE_BTN.innerHTML = `Show more <span class = "list__remaining">(${updateBooksLeft() - BOOKS_PER_PAGE})</span>`
+data.home.SHOW_MORE_BTN.innerHTML = `Show more <span class = "list__remaining">(${updateBooksLeft() - BOOKS_PER_PAGE})</span>`
     }
 
 
@@ -95,7 +94,7 @@ export const showMoreAction = (event) => {
             from where the first function call ended to 36 more books*/
             appendBooks(books.slice(booksOnPageCount, booksOnPageCount + 36))
         }   
-            SHOW_MORE_BTN.innerHTML = `Show more <span class="list__remaining">(${booksLeft - BOOKS_PER_PAGE})</span>`
+            data.home.SHOW_MORE_BTN.innerHTML = `Show more <span class="list__remaining">(${booksLeft - BOOKS_PER_PAGE})</span>`
     
             /* make the summary overlay show when a book is clicked
      Used a for loop to iterate over all the book buttons so that
@@ -237,9 +236,9 @@ export const searchBooks = (event) => {
           <div class="preview__author">${authors[book.author]}</div>
         </div>
       `;
-      fragment.appendChild(button);
+      FRAGMENT.appendChild(button);
     });
-    document.querySelector('[data-list-items]').appendChild(fragment);
+    document.querySelector('[data-list-items]').appendChild(FRAGMENT);
 
     // disable the show more button for the results page
     SHOW_MORE_BTN.disabled = true;

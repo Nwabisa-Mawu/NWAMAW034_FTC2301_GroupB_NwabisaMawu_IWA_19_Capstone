@@ -1,4 +1,4 @@
-import { books, genres, authors, BOOKS_PER_PAGE } from "./data.js";
+import { books, genres, authors } from "./data.js";
 
 import {
 	appendBooks,
@@ -7,6 +7,44 @@ import {
 	searchBooks,
 	changeTheme
 } from './functions.js'
+
+
+/*-----------------------------------------------GLOBAL VARIABLES---------------------------------------------- */
+
+/**
+ * This is the fragment used to create the book button lists html
+ */
+export const FRAGMENT = document.createDocumentFragment()
+
+
+/*-----------------------------------------------DOM ELEMENTS STORAGE OBJECT------------------------------------ */
+/**
+ * this object has the query selectors for all the DOM elements used in the javascript
+ */
+export const data = {
+    'home': {
+        bookCards: document.querySelectorAll('preview'),
+        main: document.querySelector('[data-list-items]'),
+        'SHOW_MORE_BTN': document.querySelector('[data-list-button]'),
+        root: document.documentElement,
+        logoText: document.querySelector('.header__text'),
+        search: document.querySelector('[data-header-search]'),
+        theme: document.querySelector('[data-header-settings]')
+    },
+	'summary': {
+		overlay: document.querySelector('[data-list-active]'),
+		close: document.querySelector('[data-list-close]'),
+	},
+    'search': {
+        overlay: document.querySelector('[data-search-overlay]'),
+        title: document.querySelector('[data-search-title]'),
+    },
+    'theme': {
+        overlay: document.querySelector('[data-settings-overlay]'),
+
+    }
+}
+
 
 /*-----------------------------------------------GLOBAL VARIABLES---------------------------------------------- */
 
@@ -17,15 +55,8 @@ import {
  */
 export const SHOW_MORE_BTN = document.querySelector('[data-list-button]');
 
-/**
- * This is the fragment used to create the book button lists html
- */
-export const fragment = document.createDocumentFragment()
 
-
-
-
-/*---------------------------------------HOME PAGE DISPLAY------------------------------- */
+/*--------------------------------------------------------HOME PAGE DISPLAY----------------------------------------------------- */
 
 // /* calling the function to load the page with book list using an event
 // listener for when the page first loads  */
@@ -38,7 +69,7 @@ SHOW_MORE_BTN.addEventListener("click", showMoreAction)
 
 /* this event listener return to home button when you click on the book connect
 text and logo */
-const logo = document.querySelector('.header__text')
+const logo = data.home.logoText
 logo.addEventListener("click", (event) => {
 	event.preventDefault()
 
@@ -58,7 +89,7 @@ logo.addEventListener("click", (event) => {
  
 
 
-/*---------------------------------------------SEARCH----------------------------------- */
+/*-------------------------------------------------------------SEARCH------------------------------------------------------- */
 
 /**
  * This is an array of the values of the genres object.
@@ -75,7 +106,7 @@ authorArray.unshift("All Authors")
 /**
  * This is the dialog box for the search overlay html
  */
-const searchDialog = document.querySelector('[data-search-overlay]')
+const searchDialog = data.search.overlay
 
 searchDialog.innerHTML = /*html*/
 	`<div class="overlay__content">
@@ -111,7 +142,7 @@ searchDialog.innerHTML = /*html*/
 const handleSearchOverlay = (event) => {
 	event.preventDefault()
 	searchDialog.showModal()
-	document.querySelector('[data-search-title]').focus()
+	data.search.title.focus()
 }
 
 
@@ -143,7 +174,7 @@ searchCancelBtn.addEventListener("click", (event) => {
 })
 
 /* event listener for the search button to bring out the overlay */
-const homeSearchBtn = document.querySelector('[data-header-search]')
+const homeSearchBtn = data.home.search
 homeSearchBtn.addEventListener("click", handleSearchOverlay)
 
 
@@ -152,7 +183,7 @@ homeSearchBtn.addEventListener("click", handleSearchOverlay)
 /**
  * This variable is the dialog box for the light/dark toggle overlay
  */
-export const lightToggleDialog = document.querySelector('[data-settings-overlay]');
+export const lightToggleDialog = data.theme.overlay;
 
 lightToggleDialog.innerHTML = /*html*/
 	`<div class="overlay__content">
@@ -179,13 +210,12 @@ lightToggleDialog.innerHTML = /*html*/
  * This is the icon on the top left of the homepage, when clicked, it 
  * will show the light/dark toggle overlay
  */
-const lightToggleBtn = document.querySelector('[data-header-settings]')
+const lightToggleBtn = data.home.theme
 //This is the event listener that shows the light/dark toggle overlay
 lightToggleBtn.addEventListener("click", (event) => {
 	event.preventDefault();
 	lightToggleDialog.showModal();
 })
-
 
 
 //save and cancel buttons for the light/toggle overlay
