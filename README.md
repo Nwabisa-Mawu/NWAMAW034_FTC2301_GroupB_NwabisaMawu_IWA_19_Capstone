@@ -21,10 +21,7 @@ Files inside this repository:
     - data.js - js file with three objects for the genre, author and book information
 
 How the weboage looks:
-<a href="https://www.loom.com/share/49e5c4ebc0144b04891e5747ad44f3db">
-    <p>Book Connect</p>
-    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/49e5c4ebc0144b04891e5747ad44f3db-with-play.gif">
-  </a>
+<video src="C:\Users\nwabi\OneDrive\Desktop\CodeSpace-projects\NWAMAW034_FTC2301_GroupB_NwabisaMawu_IWA_19_Capstone\meta\BookConnect.mp4"></video>
 
 
 
