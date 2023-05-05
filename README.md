@@ -1,4 +1,4 @@
-#Nwabisa Mawu - IWA_19 Capstone project
+<h1>Nwabisa Mawu - IWA_19 Capstone project</h1>
 
 This is my capstone project for the Introduction to WebApps module.
 The task was to use the given html and css to give functionality to the webpage
