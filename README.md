@@ -15,6 +15,7 @@ JavaScript
 Files inside this repository:
 - index.html - main html file
 - styles.css - css stylesheet
+- Presentation PDF
   - js folder: 
     - functions.js - js file containing all the big functions used in the main js file
     - scripts.js - main js file that is used on the html page
