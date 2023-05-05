@@ -22,7 +22,7 @@ Files inside this repository:
 
 How the weboage looks:
 
-<video src="https://www.loom.com/share/3667a855369e4b13a177b2a330c1ae1a"></video>
+https://user-images.githubusercontent.com/89596900/236576107-a4a8169a-3df2-4efd-ba47-9ee984b0c56b.mp4
 
 
 
