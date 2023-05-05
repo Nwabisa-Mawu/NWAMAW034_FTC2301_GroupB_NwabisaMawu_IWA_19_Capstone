@@ -22,7 +22,7 @@ Files inside this repository:
 
 How the weboage looks:
 
-https://user-images.githubusercontent.com/89596900/236571861-3c18ca01-5d4c-43d8-ae87-809d8021d6d3.mp4
+meta\BookConnect.mp4
 
 
 
