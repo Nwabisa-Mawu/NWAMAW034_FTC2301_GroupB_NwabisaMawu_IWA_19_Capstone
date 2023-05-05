@@ -8,21 +8,13 @@ genreArray.unshift("All Genres");
 const authorArray = Object.values(authors);
 authorArray.unshift("All Authors")
 const matchesArray = Object(books)
-console.log(matchesArray)
+
 
 
 // if (!books && !Array.isArray(books)) throw new Error('Source required') 
 // if (!range && range.length < 2) throw new Error('Range must be an array with two numbers')
 
-const day = {
-    dark: '10, 10, 20',
-    light: '255, 255, 255',
-}
 
-const night = {
-    dark: '255, 255, 255',
-    light: '10, 10, 20',
-}
 
 //create a html fragment to hold the books
 const fragment = document.createDocumentFragment()
@@ -224,10 +216,12 @@ const handleSearchOverlay = (event) => {
     document.querySelector('[data-search-title]').focus()
 }
 
-//create a function for the search
+
 /**
- * 
- * @param {*} event 
+ * This handler will run the search through the books object 
+ * and create new buttons with the search results then print them to the
+ * html page. 
+ * @param event 
  * @returns 
  */
 const searchBooks = (event) => {
@@ -239,12 +233,14 @@ const searchBooks = (event) => {
   
     let filteredBooks = books;
   
-    // Filter by genre
+     /* apply the search filter on the genres so that if there is no 
+    genre selected, it will not run the code here. */
     if (selectedGenre !== "All Genres") {
       filteredBooks = filteredBooks.filter(book => book.genre === selectedGenre);
     }
   
-    // Filter by author
+    /* apply the search filter on the authors so that if there is no 
+    author selected, it will not run the code here. */
     if (selectedAuthor !== "All Authors") {
       filteredBooks = filteredBooks.filter(book => book.author === selectedAuthor);
     }
@@ -254,17 +250,10 @@ const searchBooks = (event) => {
       filteredBooks = filteredBooks.filter(book => book.title.toLowerCase().includes(searchText));
     } 
 
-    if (searchText === "") {
-        // Clear the book list on the homepage
-        document.querySelector('[data-list-items]').innerHTML = "";
-        //print this to the page
-       document.querySelector('[data-list-items]').innerHTML = "Sorry, no books matched your search";
-   }
-  
     // Clear the book list on the homepage
     document.querySelector('[data-list-items]').innerHTML = "";
 
-    // Append the filtered books to the book list
+    // Append the filtered books to the book list, used BOOKs_perpage to show only 36 books per page
     filteredBooks.slice(0, BOOKS_PER_PAGE).forEach(book => {
       const button = document.createElement('button');
       button.classList.add('preview');
@@ -283,9 +272,25 @@ const searchBooks = (event) => {
     // disable the show more button for the results page
     SHOW_MORE_BTN.disabled = true;
 
+    /* make the summary overlay show when a book in the results page is clicked
+ Used a for of loop to iterate over all the book buttons so that
+ each one can be clicked on*/
+ const searchResultList = document.querySelector('[data-list-items]')
+ const searchResultBook = searchResultList.querySelectorAll('button')
+ for (const singleResult of searchResultBook ) {
+    singleResult.addEventListener("click", descriptionOverlay);
+ };
+ 
+  
+ if (!searchText) {
+  // Clear the book list on the homepage
+  document.querySelector('[data-list-items]').innerHTML = "";
+  //print this to the page
+ document.querySelector('[data-list-items]').innerHTML = "Sorry, no books matched your search";
+}
+return console.log()
   };
   
-
 const searchRow = document.querySelector('[data-search-overlay]')
 //search button in the search form
 const searchBtn = searchRow.querySelectorAll('button')[1]
@@ -296,34 +301,6 @@ searchBtn.addEventListener("click", searchBooks)
 //this is to close the overlay when the search is done
 searchBtn.addEventListener("click", (event) => {
     event.preventDefault()
-
-    //this will reset the search overlay form so its clear next time it is called
-
-    searchDialog.innerHTML = /*html*/
-    `<div class="overlay__content">
-    <form class="overlay__form" data-search-form="" id="search">
-      <label class="overlay__field">
-        <div class="overlay__label">Title</div>
-        <input class="overlay__input" data-search-title="" name="title" placeholder="Any">
-      </label>
-
-      <label class="overlay__field">
-        <div class="overlay__label">Genre</div>
-        <select class="overlay__input overlay__input_select" data-search-genres="" name="genre">${genreArray.map(genreArray => `<option value="${genreArray}">${genreArray}</option>`)}</select>
-      </label>
-
-      <label class="overlay__field">
-        <div class="overlay__label">Author</div>
-        <select class="overlay__input overlay__input_select" data-search-authors="" name="author">${authorArray.map(authorArray => `<option value="${authorArray}">${authorArray}</option>`)}</select>
-      </label>
-    </form>
-
-    <div class="overlay__row">
-      <button class="overlay__button" data-search-cancel="">Cancel</button>
-      <button class="overlay__button overlay__button_primary" type="submit" form="search">Search</button>
-    </div>
-  </div>`
-
     searchDialog.close();
 })
 
@@ -337,6 +314,96 @@ searchCancelBtn.addEventListener("click", (event) => {
  /* event listener for the search button to bring out the overlay */
  const homeSearchBtn =  document.querySelector('[data-header-search]')
 homeSearchBtn.addEventListener("click", handleSearchOverlay)
+
+
+/*----------------------------------------------------LIGHT/DARK TOGGLE---------------------------------------------------*/
+
+// data-header-settings -button // data settings overlay - dialog
+//create hmtl for the overlay for the light dark toggle
+const lightToggleDialog = document.querySelector('[data-settings-overlay]');
+lightToggleDialog.innerHTML = /*html*/
+`<div class="overlay__content">
+<form class="overlay__form" data-settings-form="" id="settings">
+<label class="overlay__field">
+  <div class="overlay__label">Theme</div>
+
+  <select class="overlay__input overlay__input_select" data-settings-theme="" name="theme">
+    <option value="day">Day</option>
+    <option value="night">Night</option>
+  </select>
+</label>
+</form>
+
+<div class="overlay__row">
+<button class="overlay__button" data-settings-cancel="">Cancel</button>
+<button class="overlay__button overlay__button_primary" type="submit" form="settings">Save</button>
+</div>
+</div>`
+
+//show the light toggle overlay
+const lightToggleBtn = document.querySelector('[data-header-settings]')
+
+lightToggleBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  lightToggleDialog.showModal();
+})
+
+//update the page to the color chosen in the drop down
+
+const day = {
+  dark: '10, 10, 20',
+  light: '255, 255, 255',
+}
+
+const night = {
+  dark: '255, 255, 255',
+  light: '10, 10, 20',
+}
+
+const toggleCancelBtn = lightToggleDialog.querySelectorAll('button')[0]
+const toggleSaveBtn = lightToggleDialog.querySelectorAll('button')[1] ;
+
+/**
+ * This handler will switch the theme of the webpage when clicked
+ * @param event 
+ */
+const changeTheme = (event) => {
+  event.preventDefault()
+/* Fetch the day/night options array
+index = 0 is day
+index = 1 is night */
+const themeOption = document.querySelector('[data-settings-theme]').querySelectorAll('option')
+
+//fetch the whole document to change its colors
+const root = document.documentElement;
+for (const singleOption of themeOption){
+//create an if statement to check which option chosen
+  if (singleOption.value !== "Night") {
+    root.style.setProperty('--color-dark', day.dark);
+    root.style.setProperty('--color-light', day.light);
+  } 
+  else {
+    root.style.setProperty('--color-dark', day.light);
+    root.style.setProperty('--color-light', day.dark);
+  }
+}
+
+//close the toggle overlay
+lightToggleDialog.close()
+}
+
+/* event listener for the save button in the light/dark toggle dialog */
+toggleSaveBtn.addEventListener("click", changeTheme)
+/* event listener for cancel button to reomve overlay */
+toggleCancelBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  lightToggleDialog.close();
+})
+
+console.log()
+
 
 /*----------------------------------------------------ACTION CALLS---------------------------------------------------*/
 /* calling the function to load page with book list using an event
