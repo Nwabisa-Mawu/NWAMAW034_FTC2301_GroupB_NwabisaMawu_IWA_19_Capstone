@@ -3,6 +3,14 @@ import { books, genres, authors, BOOKS_PER_PAGE } from "./data.js";
 const matches = books
 let page = 1;
 
+const genreArray = Object.values(genres);
+genreArray.unshift("All Genres");
+const authorArray = Object.values(authors);
+authorArray.unshift("All Authors")
+const matchesArray = Object(books)
+console.log(matchesArray)
+
+
 // if (!books && !Array.isArray(books)) throw new Error('Source required') 
 // if (!range && range.length < 2) throw new Error('Range must be an array with two numbers')
 
@@ -90,7 +98,7 @@ const appendBooks = (books) => {
      // Append the fragment to the data-list-items div.
      document.querySelector('[data-list-items]').appendChild(fragment);
 
-SHOW_MORE_BTN.innerHTML = `Show more (${updateBooksLeft()})`
+SHOW_MORE_BTN.innerHTML = `Show more (${updateBooksLeft() - BOOKS_PER_PAGE})`
     }
 
     /**
@@ -116,7 +124,7 @@ const showMoreAction = (event) => {
         from where the first function call ended to 36 more books*/
         appendBooks(books.slice(booksOnPageCount, booksOnPageCount + 36))
     }   
-        SHOW_MORE_BTN.innerHTML = `Show more (${booksLeft})`
+        SHOW_MORE_BTN.innerHTML = `Show more (${booksLeft - BOOKS_PER_PAGE})`
 
         /* make the summary overlay show when a book is clicked
  Used a for loop to iterate over all the book buttons so that
@@ -125,11 +133,18 @@ const showMoreAction = (event) => {
  36 books are added*/
  const bookList = document.querySelectorAll('.preview')
  for (let z = booksOnPageCount; z < books.length; z++ ) {
-    bookList[z].addEventListener("click", descritionOverlay )
+    bookList[z].addEventListener("click", descriptionOverlay )
  }
     };
 
-const descritionOverlay = (event) => {
+
+/**
+ * This handler shows the book description overlay when the book is clicked on
+ * @param event 
+ */
+const descriptionOverlay = (event) => {
+    event.preventDefault()
+
     //fetch the dialog box where the overlay will be appended
     const bookSummary = document.querySelector('[data-list-active]')
 
@@ -166,27 +181,180 @@ const descritionOverlay = (event) => {
         document.querySelector('[data-list-close]').addEventListener("click", () => {
             bookSummary.close()
         })
-
-        
-  
 }
 
-///////ACTION CALLS///////
+
+/*-----------------------------------SEARCH----------------------------------- */
+
+//fetch the dialog box to create the search overlay
+const searchDialog = document.querySelector('[data-search-overlay]')
+    searchDialog.innerHTML = /*html*/
+    `<div class="overlay__content">
+    <form class="overlay__form" data-search-form="" id="search">
+      <label class="overlay__field">
+        <div class="overlay__label">Title</div>
+        <input class="overlay__input" data-search-title="" name="title" placeholder="Any">
+      </label>
+
+      <label class="overlay__field">
+        <div class="overlay__label">Genre</div>
+        <select class="overlay__input overlay__input_select" data-search-genres="" name="genre">${genreArray.map(genreArray => `<option value="${genreArray}">${genreArray}</option>`)}</select>
+      </label>
+
+      <label class="overlay__field">
+        <div class="overlay__label">Author</div>
+        <select class="overlay__input overlay__input_select" data-search-authors="" name="author">${authorArray.map(authorArray => `<option value="${authorArray}">${authorArray}</option>`)}</select>
+      </label>
+    </form>
+
+    <div class="overlay__row">
+      <button class="overlay__button" data-search-cancel="">Cancel</button>
+      <button class="overlay__button overlay__button_primary" type="submit" form="search">Search</button>
+    </div>
+  </div>`
+
+/**
+ * This handler shows the search overlay when the search button in
+ * the header is clicked.
+ * @param event 
+ */
+const handleSearchOverlay = (event) => {
+    event.preventDefault()
+    searchDialog.showModal()
+    document.querySelector('[data-search-title]').focus()
+}
+
+//create a function for the search
+/**
+ * 
+ * @param {*} event 
+ * @returns 
+ */
+const searchBooks = (event) => {
+    event.preventDefault();
+
+    const searchText = document.querySelector('[data-search-title]').value.toLowerCase().trim();
+    const selectedGenre = document.querySelector('[data-search-genres]').value;
+    const selectedAuthor = document.querySelector('[data-search-authors]').value;
+  
+    let filteredBooks = books;
+  
+    // Filter by genre
+    if (selectedGenre !== "All Genres") {
+      filteredBooks = filteredBooks.filter(book => book.genre === selectedGenre);
+    }
+  
+    // Filter by author
+    if (selectedAuthor !== "All Authors") {
+      filteredBooks = filteredBooks.filter(book => book.author === selectedAuthor);
+    }
+  
+    // Apply the text search filter so that there is no search if no text
+    if (searchText !== "") {
+      filteredBooks = filteredBooks.filter(book => book.title.toLowerCase().includes(searchText));
+    } 
+
+    if (searchText === "") {
+        // Clear the book list on the homepage
+        document.querySelector('[data-list-items]').innerHTML = "";
+        //print this to the page
+       document.querySelector('[data-list-items]').innerHTML = "Sorry, no books matched your search";
+   }
+  
+    // Clear the book list on the homepage
+    document.querySelector('[data-list-items]').innerHTML = "";
+
+    // Append the filtered books to the book list
+    filteredBooks.slice(0, BOOKS_PER_PAGE).forEach(book => {
+      const button = document.createElement('button');
+      button.classList.add('preview');
+      button.dataset.preview = book.id;
+      button.innerHTML = `
+        <img class="preview__image" src="${book.image}" />
+        <div class="preview__info">
+          <h3 class="preview__title">${book.title}</h3>
+          <div class="preview__author">${authors[book.author]}</div>
+        </div>
+      `;
+      fragment.appendChild(button);
+    });
+    document.querySelector('[data-list-items]').appendChild(fragment);
+
+    // disable the show more button for the results page
+    SHOW_MORE_BTN.disabled = true;
+
+  };
+  
+
+const searchRow = document.querySelector('[data-search-overlay]')
+//search button in the search form
+const searchBtn = searchRow.querySelectorAll('button')[1]
+//cancel button in the search form
+const searchCancelBtn = searchRow.querySelectorAll('button')[0]
+//this is to carry out the book search
+searchBtn.addEventListener("click", searchBooks)
+//this is to close the overlay when the search is done
+searchBtn.addEventListener("click", (event) => {
+    event.preventDefault()
+
+    //this will reset the search overlay form so its clear next time it is called
+
+    searchDialog.innerHTML = /*html*/
+    `<div class="overlay__content">
+    <form class="overlay__form" data-search-form="" id="search">
+      <label class="overlay__field">
+        <div class="overlay__label">Title</div>
+        <input class="overlay__input" data-search-title="" name="title" placeholder="Any">
+      </label>
+
+      <label class="overlay__field">
+        <div class="overlay__label">Genre</div>
+        <select class="overlay__input overlay__input_select" data-search-genres="" name="genre">${genreArray.map(genreArray => `<option value="${genreArray}">${genreArray}</option>`)}</select>
+      </label>
+
+      <label class="overlay__field">
+        <div class="overlay__label">Author</div>
+        <select class="overlay__input overlay__input_select" data-search-authors="" name="author">${authorArray.map(authorArray => `<option value="${authorArray}">${authorArray}</option>`)}</select>
+      </label>
+    </form>
+
+    <div class="overlay__row">
+      <button class="overlay__button" data-search-cancel="">Cancel</button>
+      <button class="overlay__button overlay__button_primary" type="submit" form="search">Search</button>
+    </div>
+  </div>`
+
+    searchDialog.close();
+})
+
+//this is to close the search overlay when the cancel button is clicked
+searchCancelBtn.addEventListener("click", (event) => {
+    event.preventDefault()
+
+    searchDialog.close();
+})
+
+ /* event listener for the search button to bring out the overlay */
+ const homeSearchBtn =  document.querySelector('[data-header-search]')
+homeSearchBtn.addEventListener("click", handleSearchOverlay)
+
+/*----------------------------------------------------ACTION CALLS---------------------------------------------------*/
 /* calling the function to load page with book list using an event
 listener for when the page first loads  */
-document.addEventListener("click", appendBooks(books))
+document.addEventListener("load", appendBooks(books))
 
 /*use event listener to make button load more books with the
 showMoreAction function*/
-document.querySelector('[data-list-button]').addEventListener("click", showMoreAction) 
+SHOW_MORE_BTN.addEventListener("click", showMoreAction) 
 
 /* make the summary overlay show when a book is clicked
  Used a for loop to iterate over all the book buttons so that
  each one can be clicked on*/
  const bookList = document.querySelectorAll('.preview')
- for (let z = 0; z < books.length; z++ ) {
-    bookList[z].addEventListener("click", descritionOverlay )
- }
+ for (const singleBook of bookList ) {
+    singleBook.addEventListener("click", descriptionOverlay);
+ };
+
 
 
 
