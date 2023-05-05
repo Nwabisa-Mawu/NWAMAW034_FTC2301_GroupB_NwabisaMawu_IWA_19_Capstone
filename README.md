@@ -22,7 +22,7 @@ Files inside this repository:
 
 How the weboage looks:
 
-<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/3667a855369e4b13a177b2a330c1ae1a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+<video src="https://www.loom.com/share/3667a855369e4b13a177b2a330c1ae1a"></video>
 
 
 
