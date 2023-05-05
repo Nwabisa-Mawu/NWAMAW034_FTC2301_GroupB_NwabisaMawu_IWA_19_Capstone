@@ -21,7 +21,9 @@ Files inside this repository:
     - data.js - js file with three objects for the genre, author and book information
 
 How the weboage looks:
-<video src="C:\Users\nwabi\OneDrive\Desktop\CodeSpace-projects\NWAMAW034_FTC2301_GroupB_NwabisaMawu_IWA_19_Capstone\meta\BookConnect.mp4"></video>
+
+https://user-images.githubusercontent.com/89596900/236571861-3c18ca01-5d4c-43d8-ae87-809d8021d6d3.mp4
+
 
 
 
