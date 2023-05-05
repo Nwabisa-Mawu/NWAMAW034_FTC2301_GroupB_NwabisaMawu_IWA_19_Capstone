@@ -26,8 +26,7 @@ const extracted = books.slice(0, 36)
  * down.
  */
 const SHOW_MORE_BTN = document.querySelector('[data-list-button]');
-//make the text on button more transparent
-SHOW_MORE_BTN.setAttribute("style", "color: rgba(255, 255, 255, 0.6)");
+
 
 
 /**
@@ -90,7 +89,7 @@ const appendBooks = (books) => {
      // Append the fragment to the data-list-items div.
      document.querySelector('[data-list-items]').appendChild(fragment);
 
-SHOW_MORE_BTN.innerHTML = `Show more (${updateBooksLeft() - BOOKS_PER_PAGE})`
+SHOW_MORE_BTN.innerHTML = `Show more <span class = "list__remaining">(${updateBooksLeft() - BOOKS_PER_PAGE})</span>`
     }
 
     /**
@@ -116,7 +115,7 @@ const showMoreAction = (event) => {
         from where the first function call ended to 36 more books*/
         appendBooks(books.slice(booksOnPageCount, booksOnPageCount + 36))
     }   
-        SHOW_MORE_BTN.innerHTML = `Show more (${booksLeft - BOOKS_PER_PAGE})`
+        SHOW_MORE_BTN.innerHTML = `Show more <span class="list__remaining">(${booksLeft - BOOKS_PER_PAGE})</span>`
 
         /* make the summary overlay show when a book is clicked
  Used a for loop to iterate over all the book buttons so that
@@ -216,7 +215,6 @@ const handleSearchOverlay = (event) => {
     document.querySelector('[data-search-title]').focus()
 }
 
-
 /**
  * This handler will run the search through the books object 
  * and create new buttons with the search results then print them to the
@@ -234,21 +232,46 @@ const searchBooks = (event) => {
     let filteredBooks = books;
   
      /* apply the search filter on the genres so that if there is no 
-    genre selected, it will not run the code here. */
+    genre selected, it will not run the code here.
+    The Object.keys() function returns an array of the number ids in the 
+    genres object then the find() method will find the first key in the array
+    that has a value that matches the selected Genre.
+    The filter function will look if there is a key called genres in the
+    books array and and return that book */
     if (selectedGenre !== "All Genres") {
-      filteredBooks = filteredBooks.filter(book => book.genre === selectedGenre);
+      const genreId = Object.keys(genres).find(key => genres[key] === selectedGenre);
+      filteredBooks = filteredBooks.filter(book => book.genres.includes(genreId.toString()));
     }
   
     /* apply the search filter on the authors so that if there is no 
     author selected, it will not run the code here. */
     if (selectedAuthor !== "All Authors") {
-      filteredBooks = filteredBooks.filter(book => book.author === selectedAuthor);
+      const authorId = Object.keys(authors).find(key => authors[key] === selectedAuthor);
+      filteredBooks = filteredBooks.filter(book => book.author.includes(authorId));
     }
   
     // Apply the text search filter so that there is no search if no text
     if (searchText !== "") {
       filteredBooks = filteredBooks.filter(book => book.title.toLowerCase().includes(searchText));
     } 
+
+    //check if there were any books found
+    let booksFound = filteredBooks.length > 0;
+    //if there are no books found then should print message
+    if (!booksFound) {
+       // Clear the book list on the homepage
+           document.querySelector('[data-list-items]').innerHTML = "";
+       //print this to the page
+          document.querySelector('[data-list-items]').innerHTML = `<div class = "list__message list__message_show" data-list-message = "">
+                                                              <p>No results found.
+                                                              Your filters may be too narrow, try again</p>
+                                                          </div>`;
+
+  // disable the show more button for the results page
+    SHOW_MORE_BTN.disabled = true;
+
+       return filteredBooks
+    }
 
     // Clear the book list on the homepage
     document.querySelector('[data-list-items]').innerHTML = "";
@@ -281,14 +304,16 @@ const searchBooks = (event) => {
     singleResult.addEventListener("click", descriptionOverlay);
  };
  
-  
- if (!searchText) {
+  /* when no search content is entered but search is clicked instead of cancel */
+ if (!searchText && (selectedAuthor === "All Authors") && (selectedGenre === "All Genres")){
   // Clear the book list on the homepage
   document.querySelector('[data-list-items]').innerHTML = "";
   //print this to the page
- document.querySelector('[data-list-items]').innerHTML = "Sorry, no books matched your search";
+ document.querySelector('[data-list-items]').innerHTML = `<div class = "list__message list__message_show" data-list-message = "">
+                                                              <p>No results found.
+                                                              Your filters may be too narrow, try again</p>
+                                                          </div>`;
 }
-return console.log()
   };
   
 const searchRow = document.querySelector('[data-search-overlay]')
@@ -309,6 +334,7 @@ searchCancelBtn.addEventListener("click", (event) => {
     event.preventDefault()
 
     searchDialog.close();
+
 })
 
  /* event listener for the search button to bring out the overlay */
@@ -351,15 +377,6 @@ lightToggleBtn.addEventListener("click", (event) => {
 
 //update the page to the color chosen in the drop down
 
-const day = {
-  dark: '10, 10, 20',
-  light: '255, 255, 255',
-}
-
-const night = {
-  dark: '255, 255, 255',
-  light: '10, 10, 20',
-}
 
 const toggleCancelBtn = lightToggleDialog.querySelectorAll('button')[0]
 const toggleSaveBtn = lightToggleDialog.querySelectorAll('button')[1] ;
@@ -369,29 +386,52 @@ const toggleSaveBtn = lightToggleDialog.querySelectorAll('button')[1] ;
  * @param event 
  */
 const changeTheme = (event) => {
-  event.preventDefault()
-/* Fetch the day/night options array
-index = 0 is day
-index = 1 is night */
-const themeOption = document.querySelector('[data-settings-theme]').querySelectorAll('option')
+  event.preventDefault();
 
-//fetch the whole document to change its colors
-const root = document.documentElement;
-for (const singleOption of themeOption){
-//create an if statement to check which option chosen
-  if (singleOption.value !== "Night") {
-    root.style.setProperty('--color-dark', day.dark);
-    root.style.setProperty('--color-light', day.light);
-  } 
-  else {
-    root.style.setProperty('--color-dark', day.light);
-    root.style.setProperty('--color-light', day.dark);
+  const day = {
+    dark: '10, 10, 20',
+    light: '255, 255, 255',
+  };
+  
+  const night = {
+    dark: '255, 255, 255',
+    light: '10, 10, 20',
+  };
+
+  const themeOption = document.querySelector('[data-settings-theme]').querySelectorAll('option')
+//first find the selected theme
+let selectedTheme = null;
+for (const singleOption of themeOption) {
+  if (singleOption.selected) {
+    selectedTheme = singleOption.value
   }
 }
 
-//close the toggle overlay
+
+//fetch the whole document to change its colors
+const root = document.documentElement;
+
+  if (selectedTheme.toLocaleLowerCase() !== 'night') {
+    root.style.setProperty('--color-dark', day.dark);
+    root.style.setProperty('--color-light', day.light);
+    console.log(4, selectedTheme)
+  
+  } else {
+    root.style.setProperty('--color-dark', night.dark);
+    root.style.setProperty('--color-light', night.light);
+   console.log(2, selectedTheme)
+  }
+
+  
+
+//  close the toggle overlay
 lightToggleDialog.close()
+
+console.log(Object.fromEntries(theme))
 }
+
+
+
 
 /* event listener for the save button in the light/dark toggle dialog */
 toggleSaveBtn.addEventListener("click", changeTheme)
@@ -400,9 +440,10 @@ toggleCancelBtn.addEventListener("click", (event) => {
   event.preventDefault();
 
   lightToggleDialog.close();
+
 })
 
-console.log()
+
 
 
 /*----------------------------------------------------ACTION CALLS---------------------------------------------------*/
@@ -422,6 +463,17 @@ SHOW_MORE_BTN.addEventListener("click", showMoreAction)
     singleBook.addEventListener("click", descriptionOverlay);
  };
 
+ /* this event listener return to home button when you click on the book connect
+ text and logo */
+ const logo = document.querySelector('.header__text')
+logo.addEventListener("click", (event) => {
+      event.preventDefault()
+
+   // Clear the book list on the homepage
+   document.querySelector('[data-list-items]').innerHTML = "";
+//call this function to load the page again
+   appendBooks(books)
+})
 
 
 
