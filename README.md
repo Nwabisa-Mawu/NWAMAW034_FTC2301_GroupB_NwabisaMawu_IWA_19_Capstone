@@ -5,7 +5,7 @@ The task was to use the given html and css to give functionality to the webpage
 by fulfilling requirements given as user stories.
 
 Quick access link to the presentation on how I completed the task
-<a href="#">Slide show PDF</a>
+<a href="NWAMAW034_FTC2301_GroupB_NwabisaMawu_IWA_19_Capstone_Presentation.pdf">Slide show PDF</a>
 
 Technologies used:   
 HTML
@@ -21,7 +21,7 @@ Files inside this repository:
     - data.js - js file with three objects for the genre, author and book information
 
 How the weboage looks:
-<video src="C:\Users\nwabi\OneDrive\Desktop\CodeSpace-projects\NWAMAW034_FTC2301_GroupB_NwabisaMawu_IWA_19_Capstone\meta\BookConnect.mp4"></video>
+
 
 
 
