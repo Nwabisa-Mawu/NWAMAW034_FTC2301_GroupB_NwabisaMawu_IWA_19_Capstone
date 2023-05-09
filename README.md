@@ -5,7 +5,7 @@ The task was to use the given html and css to give functionality to the webpage
 by fulfilling requirements given as user stories.
 
 Quick access link to the presentation on how I completed the task
-<a href="NWAMAW034_FTC2301_GroupB_NwabisaMawu_IWA_19_Capstone_Presentation.pdf">Slide show PDF</a>
+<a href="NWAMAW034_FTC2301_GroupB_NwabisaMawu_IWA_19_Capstone_Presentation_.pdf">Slide show PDF</a>
 
 Technologies used:   
 HTML
