@@ -76,7 +76,7 @@ data.home.SHOW_MORE_BTN.innerHTML = `Show more <span class = "list__remaining">(
      * the number in the show more button everytime it is clicked 
      * until there are no more books left in the books object.
      */
-export const showMoreAction = (event) => {
+export const showMoreAction = (event) => { 
         event.preventDefault()
             /* fetch the books that are already on the page then count them and
         use the number of books left in the books object to add more books so the button
@@ -117,18 +117,15 @@ export const showMoreAction = (event) => {
  */
 export const descriptionOverlay = (event) => {
     event.preventDefault()
-
-    
     /**
      * The dialog box where the overlay will be appended
      */
     const bookSummary = document.querySelector('[data-list-active]')
-
-    //get the book that is clicked
+    //get the book that is clicked by getting the closest element with the identifier to
+    //where the click happened.
     const book = event.target.closest('.preview');
     //get a book id to use to fetch book information
     const bookId = book.getAttribute('data-preview');
-
     //for loop to iterate over the book object lloking for matchind ids
     for (let i = 0; i < books.length; i++) {
         //check if the id in the books object matches that of the clicked book
@@ -149,10 +146,8 @@ export const descriptionOverlay = (event) => {
         </div>`
         }
     }
-
         //show the book summary overlay when its done being created
         bookSummary.showModal()
-
         //when the close button is clicked, the overlay should be removed
         document.querySelector('[data-list-close]').addEventListener("click", () => {
             bookSummary.close()

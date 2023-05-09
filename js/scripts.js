@@ -1,4 +1,7 @@
-import { books, genres, authors } from "./data.js";
+import { 
+  books, 
+  genres, 
+  authors } from "./data.js";
 
 import {
 	appendBooks,
@@ -16,8 +19,16 @@ import {
  */
 export const FRAGMENT = document.createDocumentFragment()
 
+//made this a global variable because used in many functions
+/**
+ * This is the button used to add more books to the page as you scroll
+ * down.
+ */
+export const SHOW_MORE_BTN = document.querySelector('[data-list-button]');
+
 
 /*-----------------------------------------------DOM ELEMENTS STORAGE OBJECT------------------------------------ */
+
 /**
  * this object has the query selectors for all the DOM elements used in the javascript
  */
@@ -44,16 +55,6 @@ export const data = {
 
     }
 }
-
-
-/*-----------------------------------------------GLOBAL VARIABLES---------------------------------------------- */
-
-//made this a global variable because used in many functions
-/**
- * This is the button used to add more books to the page as you scroll
- * down.
- */
-export const SHOW_MORE_BTN = document.querySelector('[data-list-button]');
 
 
 /*--------------------------------------------------------HOME PAGE DISPLAY----------------------------------------------------- */
