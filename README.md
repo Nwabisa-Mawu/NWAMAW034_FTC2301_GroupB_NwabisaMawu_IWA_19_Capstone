@@ -21,7 +21,7 @@ Files inside this repository:
     - scripts.js - main js file that is used on the html page
     - data.js - js file with three objects for the genre, author and book information
 
-How the weboage looks:
+How the webpage looks:
 
 
 https://user-images.githubusercontent.com/89596900/236583938-cdeb1bda-06c2-42be-b1df-78218ae392e7.mp4
