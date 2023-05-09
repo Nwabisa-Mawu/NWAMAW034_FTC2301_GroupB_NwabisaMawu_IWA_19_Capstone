@@ -68,6 +68,7 @@ root.addEventListener("load", appendBooks(books))
 showMoreAction function*/
 SHOW_MORE_BTN.addEventListener("click", showMoreAction)
 
+
 /* this event listener return to home button when you click on the book connect
 text and logo */
 const logo = data.home.logoText
