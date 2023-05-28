@@ -28,7 +28,7 @@ return booksLeft
 /**
  * This function loads the home page of the website with 
  * the books shown in a list of 36 at a time.
- * @param {imported object} books 
+ * @param {object} books 
  */
 export const appendBooks = (books) => {
 
